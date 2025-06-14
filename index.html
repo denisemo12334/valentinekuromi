@@ -6,7 +6,7 @@
   <title>Do You Wanna Be My Boyfriend?</title>
   <style>
     body {
-      background-color: #a16be8;
+      background-color: #bfa0e8;
       font-family: sans-serif;
       text-align: center;
       color: #482478;
@@ -25,6 +25,7 @@
       font-size: 24px;
       margin-bottom: 20px;
       color: #482478;
+      transition: transform 0.3s ease;
     }
 
     .button-container {
@@ -53,16 +54,16 @@
       animation: shake 0.3s;
     }
 
+    .zoom-effect {
+      animation: zoomPop 0.4s ease-in-out;
+    }
+
     @keyframes shake {
       0% { transform: translate(0px, 0px); }
       25% { transform: translate(-5px, 2px); }
       50% { transform: translate(5px, -2px); }
       75% { transform: translate(-3px, 3px); }
       100% { transform: translate(0px, 0px); }
-    }
-
-    .zoom-effect {
-      animation: zoomPop 0.4s ease-in-out;
     }
 
     @keyframes zoomPop {
@@ -90,12 +91,14 @@
     function handleYesClick() {
       yesClicks++;
 
-      // Imagem menor + tremor + botão no indo pro lado
       if (yesClicks < 5) {
         image.style.transform = 'scale(0.9)';
         image.classList.add('shake');
+        text.classList.add('shake');
+
         setTimeout(() => {
           image.classList.remove('shake');
+          text.classList.remove('shake');
         }, 300);
 
         const yesBtn = document.getElementById('yesBtn');
@@ -108,7 +111,12 @@
         text.textContent = "YAY!!! I love you so much my boyfriend ♡";
 
         image.classList.add('zoom-effect');
-        setTimeout(() => image.classList.remove('zoom-effect'), 400);
+        text.classList.add('zoom-effect');
+
+        setTimeout(() => {
+          image.classList.remove('zoom-effect');
+          text.classList.remove('zoom-effect');
+        }, 400);
 
         buttons.innerHTML = `
           <div class="center-button">
@@ -131,6 +139,7 @@
       image.src = "https://i.pinimg.com/originals/c7/4e/ca/c74ecaa980838f6bf2bf601c0fc79eb1.gif";
       image.style.transform = 'scale(1)';
       text.textContent = "Do you wanna be my boyfriend?";
+      text.style.transform = 'scale(1)';
       buttons.innerHTML = `
         <button id="yesBtn">Yes</button>
         <button id="noBtn">No</button>
