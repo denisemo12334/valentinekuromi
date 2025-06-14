@@ -6,23 +6,25 @@
   <title>Do You Wanna Be My Boyfriend?</title>
   <style>
     body {
-      background-color: #e6ccff; /* Lilás claro */
+      background-color: #a16be8;
       font-family: sans-serif;
       text-align: center;
-      color: #800080; /* Roxo escuro */
-      padding: 40px;
+      color: #482478;
+      padding-top: 100px;
     }
 
     img {
-      width: 300px;
+      width: 240px;
       height: auto;
       border-radius: 12px;
       margin-bottom: 20px;
+      transition: transform 0.3s ease;
     }
 
     #text {
       font-size: 24px;
       margin-bottom: 20px;
+      color: #482478;
     }
 
     .button-container {
@@ -32,7 +34,7 @@
     }
 
     button {
-      background-color: #800080;
+      background-color: #482478;
       color: white;
       border: none;
       padding: 12px 24px;
@@ -45,6 +47,28 @@
     .center-button {
       display: flex;
       justify-content: center;
+    }
+
+    .shake {
+      animation: shake 0.3s;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0px, 0px); }
+      25% { transform: translate(-5px, 2px); }
+      50% { transform: translate(5px, -2px); }
+      75% { transform: translate(-3px, 3px); }
+      100% { transform: translate(0px, 0px); }
+    }
+
+    .zoom-effect {
+      animation: zoomPop 0.4s ease-in-out;
+    }
+
+    @keyframes zoomPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
     }
   </style>
 </head>
@@ -61,44 +85,65 @@
     const image = document.getElementById('mainImage');
     const text = document.getElementById('text');
     const buttons = document.getElementById('buttons');
-    const yesBtn = document.getElementById('yesBtn');
-    const noBtn = document.getElementById('noBtn');
-
     let yesClicks = 0;
 
-    yesBtn.addEventListener('click', () => {
+    function handleYesClick() {
       yesClicks++;
 
+      // Imagem menor + tremor + botão no indo pro lado
       if (yesClicks < 5) {
+        image.style.transform = 'scale(0.9)';
+        image.classList.add('shake');
+        setTimeout(() => {
+          image.classList.remove('shake');
+        }, 300);
+
+        const yesBtn = document.getElementById('yesBtn');
         yesBtn.style.transform = `scale(${1 + yesClicks * 0.2})`;
+
+        const noBtn = document.getElementById('noBtn');
+        noBtn.style.marginLeft = `${yesClicks * 10}px`;
       } else {
         image.src = "https://i.pinimg.com/originals/2a/47/aa/2a47aa0319fe62f52294f85b6b60b6e1.gif";
         text.textContent = "YAY!!! I love you so much my boyfriend ♡";
-        buttons.innerHTML = `<div class="center-button"><button onclick="restart()">Restart</button></div>`;
-      }
-    });
 
-    noBtn.addEventListener('click', () => {
+        image.classList.add('zoom-effect');
+        setTimeout(() => image.classList.remove('zoom-effect'), 400);
+
+        buttons.innerHTML = `
+          <div class="center-button">
+            <button onclick="restart()">Restart</button>
+          </div>`;
+      }
+    }
+
+    function handleNoClick() {
       image.src = "https://i.pinimg.com/originals/39/74/ee/3974ee7ca0d9829b84ee8db40e960e0e.gif";
       text.textContent = "Oh.. okay, I'm sorry for asking..";
-      buttons.innerHTML = `<div class="center-button"><button onclick="restart()">Restart</button></div>`;
-    });
+      buttons.innerHTML = `
+        <div class="center-button">
+          <button onclick="restart()">Restart</button>
+        </div>`;
+    }
 
     function restart() {
       yesClicks = 0;
       image.src = "https://i.pinimg.com/originals/c7/4e/ca/c74ecaa980838f6bf2bf601c0fc79eb1.gif";
+      image.style.transform = 'scale(1)';
       text.textContent = "Do you wanna be my boyfriend?";
       buttons.innerHTML = `
         <button id="yesBtn">Yes</button>
         <button id="noBtn">No</button>
       `;
 
-      const newYes = document.getElementById('yesBtn');
-      const newNo = document.getElementById('noBtn');
-
-      newYes.addEventListener('click', yesBtn.onclick);
-      newNo.addEventListener('click', noBtn.onclick);
+      // Reatribui eventos
+      document.getElementById('yesBtn').addEventListener('click', handleYesClick);
+      document.getElementById('noBtn').addEventListener('click', handleNoClick);
     }
+
+    // Inicializa eventos
+    document.getElementById('yesBtn').addEventListener('click', handleYesClick);
+    document.getElementById('noBtn').addEventListener('click', handleNoClick);
   </script>
 
 </body>
