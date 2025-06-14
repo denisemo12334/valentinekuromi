@@ -2,66 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Be My Boyfriend?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Do You Wanna Be My Boyfriend?</title>
   <style>
     body {
       background-color: #bfa0e8;
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       text-align: center;
+      color: #482478;
       padding-top: 100px;
-      color: #5c3b87;
-      transition: all 0.3s ease;
     }
-    #container {
+
+    img {
+      width: 240px;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    #text {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #482478;
+      transition: transform 0.3s ease;
+    }
+
+    .button-container {
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
       gap: 20px;
-      margin-top: 100px;
     }
-    img {
-      width: 250px;
-      height: auto;
-      transition: all 0.2s ease;
-    }
-    h1 {
-      font-size: 1.5rem;
-      color: #5c3b87;
-    }
-    .buttons {
-      display: flex;
-      gap: 20px;
-      margin-top: 10px;
-    }
+
     button {
-      background-color: #5c3b87;
+      background-color: #482478;
       color: white;
       border: none;
-      padding: 10px 20px;
-      font-size: 1rem;
+      padding: 12px 24px;
       border-radius: 8px;
+      font-size: 16px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease-in-out;
     }
+
     .center-button {
-      margin-top: 20px;
+      display: flex;
+      justify-content: center;
     }
+
     .shake {
-      animation: shake 0.3s infinite;
+      animation: shake 0.3s;
     }
-    .zoom {
-      animation: zoom 0.5s ease;
+
+    .zoom-effect {
+      animation: zoomPop 0.4s ease-in-out;
     }
+
     @keyframes shake {
-      0% { transform: translate(0, 0); }
-      25% { transform: translate(3px, -3px); }
-      50% { transform: translate(-3px, 3px); }
-      75% { transform: translate(3px, 3px); }
-      100% { transform: translate(0, 0); }
+      0% { transform: translate(0px, 0px); }
+      25% { transform: translate(-5px, 2px); }
+      50% { transform: translate(5px, -2px); }
+      75% { transform: translate(-3px, 3px); }
+      100% { transform: translate(0px, 0px); }
     }
-    @keyframes zoom {
+
+    @keyframes zoomPop {
       0% { transform: scale(1); }
       50% { transform: scale(1.2); }
       100% { transform: scale(1); }
@@ -69,75 +74,97 @@
   </style>
 </head>
 <body>
-  <div id="container">
-    <img id="mainImage" src="https://i.pinimg.com/originals/c7/4e/ca/c74ecaa980838f6bf2bf601c0fc79eb1.gif" alt="cute" />
-    <h1 id="mainText">Would you make me the happiest person and be my boyfriend?</h1>
-    <div class="buttons" id="mainButtons">
-      <button id="yesBtn">Yes</button>
-      <button id="noBtn">No</button>
-    </div>
-    <div id="restartContainer" style="display:none">
-      <button class="center-button" onclick="resetAll()">Restart</button>
-    </div>
+
+  <img id="mainImage" src="https://i.pinimg.com/originals/c7/4e/ca/c74ecaa980838f6bf2bf601c0fc79eb1.gif" alt="cute gif"/>
+  <div id="text">Would you make me the happiest person and be my boyfriend?</div>
+  <div id="buttons" class="button-container">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
   </div>
 
   <script>
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn = document.getElementById("noBtn");
-    const mainImage = document.getElementById("mainImage");
-    const mainText = document.getElementById("mainText");
-    const mainButtons = document.getElementById("mainButtons");
-    const restartContainer = document.getElementById("restartContainer");
+    const image = document.getElementById('mainImage');
+    const text = document.getElementById('text');
+    const buttons = document.getElementById('buttons');
+    let yesClicks = 0;
 
-    let yesClickCount = 0;
+    // NOVO: frases progressivas
+    const yesTextStages = [
+      "Really?",
+      "Really?!",
+      "Really?!?!",
+      "REALLY?!?!?!"
+    ];
 
-    const reallyTexts = ["Really?", "Really?!", "Really?!?!", "REALLY?!?!?!"];
+    function handleYesClick() {
+      yesClicks++;
 
-    yesBtn.addEventListener("click", () => {
-      yesClickCount++;
+      if (yesClicks < 5) {
+        image.style.transform = 'scale(0.9)';
+        image.classList.add('shake');
+        text.classList.add('shake');
 
-      if (yesClickCount <= 4) {
-        yesBtn.style.transform = `scale(${1 + yesClickCount * 0.1})`;
-        noBtn.style.transform = `translateX(${yesClickCount * 20}px)`;
-        mainImage.classList.add("shake");
-        mainText.classList.add("shake");
-        mainImage.style.width = `${250 - yesClickCount * 10}px`;
-        mainText.innerText = reallyTexts[yesClickCount - 1];
+        // NOVO: muda o texto com base no clique
+        text.textContent = yesTextStages[yesClicks - 1];
+
         setTimeout(() => {
-          mainImage.classList.remove("shake");
-          mainText.classList.remove("shake");
+          image.classList.remove('shake');
+          text.classList.remove('shake');
         }, 300);
+
+        const yesBtn = document.getElementById('yesBtn');
+        yesBtn.style.transform = `scale(${1 + yesClicks * 0.2})`;
+
+        const noBtn = document.getElementById('noBtn');
+        noBtn.style.marginLeft = `${yesClicks * 10}px`;
       } else {
-        mainImage.src = "https://i.pinimg.com/originals/2a/47/aa/2a47aa0319fe62f52294f85b6b60b6e1.gif";
-        mainText.innerText = "You said yes?! My heart just exploded!!! ♡";
-        mainButtons.style.display = "none";
-        restartContainer.style.display = "block";
-        mainImage.classList.add("zoom");
-        mainText.classList.add("zoom");
+        image.src = "https://i.pinimg.com/originals/2a/47/aa/2a47aa0319fe62f52294f85b6b60b6e1.gif";
+        text.textContent = "YESSS!!! I’m the luckiest person ever! I love you!!! ♡";
+
+        image.classList.add('zoom-effect');
+        text.classList.add('zoom-effect');
+
         setTimeout(() => {
-          mainImage.classList.remove("zoom");
-          mainText.classList.remove("zoom");
-        }, 500);
+          image.classList.remove('zoom-effect');
+          text.classList.remove('zoom-effect');
+        }, 400);
+
+        buttons.innerHTML = `
+          <div class="center-button">
+            <button onclick="restart()">Restart</button>
+          </div>`;
       }
-    });
-
-    noBtn.addEventListener("click", () => {
-      mainImage.src = "https://i.pinimg.com/originals/39/74/ee/3974ee7ca0d9829b84ee8db40e960e0e.gif";
-      mainText.innerText = "It’s okay... I just wanted to try...";
-      mainButtons.style.display = "none";
-      restartContainer.style.display = "block";
-    });
-
-    function resetAll() {
-      yesClickCount = 0;
-      mainImage.src = "https://i.pinimg.com/originals/c7/4e/ca/c74ecaa980838f6bf2bf601c0fc79eb1.gif";
-      mainText.innerText = "Would you make me the happiest person and be my boyfriend?";
-      yesBtn.style.transform = "scale(1)";
-      noBtn.style.transform = "translateX(0)";
-      mainButtons.style.display = "flex";
-      restartContainer.style.display = "none";
-      mainImage.style.width = "250px";
     }
+
+    function handleNoClick() {
+      image.src = "https://i.pinimg.com/originals/39/74/ee/3974ee7ca0d9829b84ee8db40e960e0e.gif";
+      text.textContent = "Oh.. okay, I'm sorry for asking..";
+      buttons.innerHTML = `
+        <div class="center-button">
+          <button onclick="restart()">Restart</button>
+        </div>`;
+    }
+
+    function restart() {
+      yesClicks = 0;
+      image.src = "https://i.pinimg.com/originals/c7/4e/ca/c74ecaa980838f6bf2bf601c0fc79eb1.gif";
+      image.style.transform = 'scale(1)';
+      text.textContent = "Would you make me the happiest person and be my boyfriend?";
+      text.style.transform = 'scale(1)';
+      buttons.innerHTML = `
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+      `;
+
+      // Reatribui eventos
+      document.getElementById('yesBtn').addEventListener('click', handleYesClick);
+      document.getElementById('noBtn').addEventListener('click', handleNoClick);
+    }
+
+    // Inicializa eventos
+    document.getElementById('yesBtn').addEventListener('click', handleYesClick);
+    document.getElementById('noBtn').addEventListener('click', handleNoClick);
   </script>
+
 </body>
 </html>
